@@ -1,4 +1,4 @@
-package com.alma.Capstone_Blazegraph;
+package com.alma.opendata;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import com.bigdata.rdf.sail.BigdataSailRepository;
 
 
 
-public class Blaze1 {
+public class BlazegraphExample {
 	public static void main(String[] args) throws OpenRDFException {
 
 		final Properties props = new Properties();
