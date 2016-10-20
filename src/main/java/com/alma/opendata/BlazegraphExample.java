@@ -5,15 +5,22 @@ import com.bigdata.journal.Options;
 import com.bigdata.rdf.model.BigdataStatement;
 import com.bigdata.rdf.sail.BigdataSail;
 import com.bigdata.rdf.sail.BigdataSailRepository;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.openrdf.OpenRDFException;
+import org.openrdf.model.Model;
 import org.openrdf.model.Statement;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
-import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.*;
+import org.openrdf.rio.helpers.RDFHandlerBase;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.*;
 import java.util.Properties;
 
 
@@ -42,17 +49,8 @@ public class BlazegraphExample {
         // open repository connection
         RepositoryConnection cxn = repo.getConnection();
 
-        // upload data to repository
-        try {
-            cxn.begin();
-            cxn.add(new File("src/main/resources/data16.nq"), "base:", RDFFormat.NQUADS);
-            cxn.commit();
-        } catch (OpenRDFException ex) {
-            cxn.rollback();
-            throw ex;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        NQuadsLoader loader = new NQuadsLoader(cxn);
+        loader.load("/home/thomas/Téléchargements/dpef.html-rdfa.nq");
 
         // evaluate sparql query
 
@@ -60,8 +58,8 @@ public class BlazegraphExample {
                 .prepareTupleQuery(QueryLanguage.SPARQL,
                         "select * where { GRAPH :g { ?s ?p ?o . } }");
         TupleQueryResult result = tupleQuery.evaluate();*/
-        RepositoryResult<Statement> result = cxn.getStatements(null, null, null, true);
-        int cpt = 0;
+        RepositoryResult<Statement> result = cxn.getStatements(null, new URIImpl("http://rdf.data-vocabulary.org/#locality"), null, true);
+        int cpt= 0;
         while (result.hasNext()) {
             Statement bindingSet = result.next();
             BigdataStatement bdStmt = (BigdataStatement) bindingSet;
