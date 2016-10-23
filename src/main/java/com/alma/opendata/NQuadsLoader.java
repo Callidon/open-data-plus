@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by thomas on 20/10/16.
@@ -18,27 +22,28 @@ import java.nio.file.Files;
 public class NQuadsLoader {
 
     private RepositoryConnection cn;
+    private final static Logger LOGGER = Logger.getLogger(NQuadsLoader.class.getCanonicalName());
 
     public NQuadsLoader(RepositoryConnection cn) {
         this.cn = cn;
     }
 
-    public void load(String url) throws RepositoryException {
-        final int[] cpt = {0};
+    public List<String> load(String url, String graph) throws RepositoryException {
+        List<String> rejectedQuads = new ArrayList<>();
+
         cn.begin();
         try {
-            Files.lines(FileSystems.getDefault().getPath(url))
+            Path path = FileSystems.getDefault().getPath(url);
+            Files.lines(path)
                     .forEach(line -> {
-                        StringReader r = new StringReader(line);
-                        cpt[0]++;
+                        StringReader reader = new StringReader(line);
                         try {
-                            Model model = Rio.parse(r, "base:", RDFFormat.NQUADS);
+                            Model model = Rio.parse(reader, graph, RDFFormat.NQUADS);
                             cn.add(model);
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         } catch (RDFParseException e) {
-                            System.err.println(e.getMessage() + " line " + cpt[0]);
-                        } catch (RepositoryException e) {
+                            rejectedQuads.add(line);
+                            LOGGER.warning(e.getMessage());
+                        } catch (RepositoryException | IOException e) {
                             e.printStackTrace();
                         }
                     });
@@ -48,5 +53,6 @@ public class NQuadsLoader {
         } finally {
             cn.commit();
         }
+        return rejectedQuads;
     }
 }
