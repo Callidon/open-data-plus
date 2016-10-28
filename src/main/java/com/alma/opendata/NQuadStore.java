@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
 
 /**
  *
@@ -59,14 +60,22 @@ public class NQuadStore {
 
     public static void main(String[] args) {
         try {
+            Scanner sc = new Scanner(System.in);
             NQuadStore store = new NQuadStore("src/main/resources/base-config.properties");
-            store.load("/home/thomas/open-data-plus/src/main/resources/data16.nq", "base:");
-            TupleQueryResult result = store.request("select * where { GRAPH ?g { ?s ?p ?o . } }", "base:");
-            while (result.hasNext()) {
-                BindingSet bindingSet = result.next();
-                System.out.println(bindingSet);
+            System.out.println("File to load ('located in src/main/resources/') : ");
+            String file = sc.nextLine();
+            store.load("src/main/resources/" + file, "base:");
+            System.out.println("Query to execute :");
+            while(sc.hasNext()) {
+                String request = sc.nextLine();
+                //TupleQueryResult result = store.request("select * where { GRAPH ?g { ?s ?p ?o . } }", "base:");
+                TupleQueryResult result = store.request(request, "base:");
+                while (result.hasNext()) {
+                    BindingSet bindingSet = result.next();
+                    System.out.println(bindingSet);
+                }
+                result.close();
             }
-            result.close();
             store.shutdown();
         } catch(Exception e) {
             e.printStackTrace();
