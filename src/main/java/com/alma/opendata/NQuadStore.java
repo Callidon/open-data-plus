@@ -59,8 +59,8 @@ public class NQuadStore {
     }
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         try {
-            Scanner sc = new Scanner(System.in);
             NQuadStore store = new NQuadStore("src/main/resources/base-config.properties");
             System.out.println("File to load ('located in src/main/resources/') : ");
             String file = sc.nextLine();
@@ -69,16 +69,29 @@ public class NQuadStore {
             while(sc.hasNext()) {
                 String request = sc.nextLine();
                 //TupleQueryResult result = store.request("select * where { GRAPH ?g { ?s ?p ?o . } }", "base:");
-                TupleQueryResult result = store.request(request, "base:");
-                while (result.hasNext()) {
-                    BindingSet bindingSet = result.next();
-                    System.out.println(bindingSet);
+                TupleQueryResult result = null;
+                try {
+                    result = store.request(request, "base:");
+                    while (result.hasNext()) {
+                        BindingSet bindingSet = result.next();
+                        System.out.println(bindingSet);
+                    }
+                    result.close();
+                } catch (RepositoryException e) {
+                    e.printStackTrace();
+                } catch (MalformedQueryException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                } catch (QueryEvaluationException e) {
+                    System.out.println(e.getMessage());
+                    continue;
                 }
-                result.close();
+                System.out.println("Query to execute :");
             }
             store.shutdown();
-        } catch(Exception e) {
+        } catch (RepositoryException e) {
             e.printStackTrace();
         }
+
     }
 }
