@@ -13,10 +13,9 @@ import org.eclipse.rdf4j.rio.{RDFFormat, RDFParseException, Rio}
   */
 object GraphStore {
 
+  // get an unique Long ID for a String
   def strToLong(node : String) : Long = {
-    var hash : Long = 2381
-    node.foreach(c => hash = ((hash << 5) + hash) + c)
-    hash
+    node.hashCode
   }
 
   // pretty print for triple patterns
@@ -27,13 +26,12 @@ object GraphStore {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("NQuads Loader")
-      .setSparkHome("SPARK_HOME")
       .setMaster("local")
     val sc = new SparkContext(conf)
 
     val nqFile : RDD[String] = sc.textFile("src/main/resources/data16.nq")
 
-    // extract tuples from the given NQUADS file
+    // extract tuples from the given NQuads file
     val tuples  = nqFile.map(t => {
       var vertexes = Array[(Long, (String, String))]()
       var edges = Array[Edge[String]]()
@@ -44,10 +42,10 @@ object GraphStore {
         val subj = (strToLong(statement.getSubject.toString), (statement.getSubject.toString, statement.getContext.toString))
         val obj = (strToLong(statement.getObject.toString), (statement.getObject.toString, statement.getContext.toString))
         val edge = Edge(strToLong(statement.getSubject.toString), strToLong(statement.getObject.toString), statement.getPredicate.toString)
-        vertexes = Array(subj, obj)
-        edges = Array(edge)
+        vertexes = vertexes :+ subj :+ obj
+        edges = edges :+ edge
       } catch {
-        case rdfex : RDFParseException => println(rdfex.getMessage)
+        case rdfex : RDFParseException => ; // skip the incorrect tuples
         case e : Exception => e.printStackTrace()
       }
       (vertexes, edges)
