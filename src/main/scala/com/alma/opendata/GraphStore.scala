@@ -28,7 +28,7 @@ object GraphStore {
       .setAppName("NQuads Loader")
     val sc = new SparkContext(conf)
 
-    val nqFile : RDD[String] = sc.textFile(args(0), args(1).toInt)
+    val nqFile : RDD[String] = sc.textFile(args(0))
 
     // extract tuples from the given NQuads file
     val tuples  = nqFile.map(t => {
@@ -51,8 +51,8 @@ object GraphStore {
     }).fold((Array[(Long, (String, String))](), Array[Edge[String]]()))((acc, tuple) => (acc._1 ++ tuple._1, acc._2 ++ tuple._2))
 
     // build the corresponding RDF graph
-    val vertexes : RDD[(Long, (String, String))] = sc.parallelize(tuples._1, args(1).toInt)
-    val edges : RDD[Edge[String]] = sc.parallelize(tuples._2, args(1).toInt)
+    val vertexes : RDD[(Long, (String, String))] = sc.parallelize(tuples._1)
+    val edges : RDD[Edge[String]] = sc.parallelize(tuples._2)
     val graph = Graph(vertexes, edges)
 
     // show all tuples
