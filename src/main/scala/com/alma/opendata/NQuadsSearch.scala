@@ -22,7 +22,13 @@ object NQuadsSearch {
       .collect().toSet)
 
     // find and print all triples containing one of the previous graphs
-    dataFile.filter(t => graphs.value.contains(t.split(" ")(3)))
+    dataFile.filter(t => {
+      val nquad = t.trim.split(" ")
+      if(nquad.length >= 4) {
+        graphs.value.contains(nquad(3))
+      }
+      false
+    })
       .foreach(println)
   }
 
