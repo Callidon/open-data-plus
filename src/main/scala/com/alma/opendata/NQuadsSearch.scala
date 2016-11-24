@@ -15,14 +15,14 @@ object NQuadsSearch {
 
     val dataFile : RDD[String] = sc.textFile(args(0))
 
-    // collect all subjects which are related to a Nantes
-    val subjects = dataFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
-      .map(t => t.split(" ")(0))
+    // collect all graphs which are related to a Nantes
+    val graphs = dataFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
+      .map(t => t.split(" ")(3))
       .distinct()
       .collect()
 
-    // find and print all triples containing one of the previous subjects
-    dataFile.filter(t => subjects.contains(t.split(" ")(0)))
+    // find and print all triples containing one of the previous graphs
+    dataFile.filter(t => graphs.contains(t.split(" ")(3)))
       .foreach(println)
   }
 
