@@ -13,14 +13,16 @@ object NQuadsSearch {
       .setAppName("NQuads Search")
     val sc = new SparkContext(conf)
 
-    val nqFile : RDD[String] = sc.textFile(args(0))
+    val dataFile : RDD[String] = sc.textFile(args(0))
 
-    val subjects = nqFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
+    // collect all subjects which are related to a Nantes
+    val subjects = dataFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
       .map(t => t.split(" ")(0))
       .distinct()
       .collect()
 
-    nqFile.filter(t => subjects.contains(t))
+    // find and print all triples containing one of the previous subjects
+    dataFile.filter(t => subjects.contains(t.split(" ")(0)))
       .foreach(println)
   }
 
