@@ -15,7 +15,12 @@ object NQuadsSearch {
 
     val nqFile : RDD[String] = sc.textFile(args(0))
 
-    nqFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
+    val subjects = nqFile.filter(t => t.contains("Nantes") | t.contains("postal-code> \"44"))
+      .map(t => t.split(" ")(0))
+      .distinct()
+      .collect()
+
+    nqFile.filter(t => subjects.contains(t))
       .foreach(println)
   }
 
