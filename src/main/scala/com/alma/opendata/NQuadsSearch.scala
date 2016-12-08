@@ -62,7 +62,6 @@ object NQuadsSearch {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("NQuads Search")
-        .setMaster("local")
     val sc = new SparkContext(conf)
 
     //runStageOne(args(0), sc)
