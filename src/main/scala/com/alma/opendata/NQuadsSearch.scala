@@ -7,7 +7,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 import org.eclipse.rdf4j.model.Statement
 import org.eclipse.rdf4j.rio.{RDFFormat, Rio}
 
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{TreeMap, TreeSet}
 
 /**
   * Web Data Commons Analyze built with Apache Spark
@@ -50,10 +50,11 @@ object NQuadsSearch {
     */
   def runStageTwo(files: String, stageOneFiles: String, sc : SparkContext) : Unit = {
     val dataFile : RDD[String] = sc.textFile(files)
-    val stageOne  = sc.broadcast(sc.textFile(stageOneFiles).collect().map(line => line + " "))
+    //val stageOne  = sc.broadcast(TreeMap[String, Int](sc.textFile(stageOneFiles).collect().toSet.zipWithIndex))
+    val map = sc.broadcast(TreeMap(sc.textFile(stageOneFiles).collect().zipWithIndex.toSeq:_*))
 
     dataFile.filter(nquad => {
-      stageOne.value.contains(getContext(nquad))
+      map.value.contains(getContext(nquad))
     }).foreach(println)
   }
 
