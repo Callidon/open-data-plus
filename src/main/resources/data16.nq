@@ -14,4 +14,3 @@ _:node14f02897b15851f56c12c2088c16878 <http://data-vocabulary.org/Breadcrumb/url
 _:node275980dd13c33776f02e347ae8d40fd <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> <http://20s-30s-social.meetup.com/cities/us/wi/milwaukee/>   .
 _:node275980dd13c33776f02e347ae8d40fd <http://schema.org/Organization/name> "\n\t\t\t\t\tMilwaukee's New In Town 20s-30s Group!\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t"@en <http://20s-30s-social.meetup.com/cities/us/wi/milwaukee/>   .
 _:node275980dd13c33776f02e347ae8d40fd <http://schema.org/Organization/url> <http://www.meetup.com/Milwaukees-New-In-Town-20s-30s-Group/> <http://20s-30s-social.meetup.com/cities/us/wi/milwaukee/>   .
-_:node275980dd13c33776f02e347ae8d40fd <htt://example.org> "Nantes"
