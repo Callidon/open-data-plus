@@ -50,17 +50,19 @@ object NQuadsSearch {
     */
   def runStageTwo(files: String, stageOneFiles: String, sc : SparkContext) : Unit = {
     val dataFile : RDD[String] = sc.textFile(files)
-    //val stageOne  = sc.broadcast(TreeMap[String, Int](sc.textFile(stageOneFiles).collect().toSet.zipWithIndex))
-    val map = sc.broadcast(TreeMap(sc.textFile(stageOneFiles).collect().zipWithIndex.toSeq:_*))
+    val stageOne  = sc.broadcast(TreeSet[String]() ++ sc.textFile(stageOneFiles).collect().toSet)
 
     dataFile.filter(nquad => {
-      map.value.contains(getContext(nquad))
+      val begin = nquad.lastIndexOf("<")
+      val end = nquad.lastIndexOf(">")
+      stageOne.value.contains(nquad.substring(begin + 1, end))
     }).foreach(println)
   }
 
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("NQuads Search")
+        .setMaster("local")
     val sc = new SparkContext(conf)
 
     //runStageOne(args(0), sc)
