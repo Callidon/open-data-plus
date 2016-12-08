@@ -1,13 +1,9 @@
 package com.alma.opendata
 
-import java.io.StringReader
-
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import org.eclipse.rdf4j.model.Statement
-import org.eclipse.rdf4j.rio.{RDFFormat, Rio}
 
-import scala.collection.immutable.{TreeMap, TreeSet}
+import scala.collection.immutable.TreeSet
 
 /**
   * Web Data Commons Analyze built with Apache Spark
@@ -15,18 +11,13 @@ import scala.collection.immutable.{TreeMap, TreeSet}
 object NQuadsSearch {
   /**
     * Parse a NQuad in String format and get it's context
-    * @param line The string to parse
+    * @param nquad The string to parse
     * @return
     */
-  def getContext(line : String) : String = {
-    try {
-      val reader = new StringReader(line)
-      val model = Rio.parse(reader, "base:", RDFFormat.NQUADS).toArray
-      val statement = model(0).asInstanceOf[Statement]
-      statement.getContext.toString
-    } catch {
-      case e: Exception => ""
-    }
+  def getContext(nquad : String) : String = {
+    val begin = nquad.lastIndexOf("<")
+    val end = nquad.lastIndexOf(">")
+    nquad.substring(begin + 1, end)
   }
 
   /**
@@ -53,13 +44,15 @@ object NQuadsSearch {
     val stageOne  = sc.broadcast(TreeSet[String]() ++ sc.textFile(stageOneFiles).collect().toSet)
 
     dataFile.filter(nquad => {
-      val begin = nquad.lastIndexOf("<")
-      val end = nquad.lastIndexOf(">")
-      stageOne.value.contains(nquad.substring(begin + 1, end))
+      stageOne.value.contains(getContext(nquad))
     }).foreach(println)
   }
 
-  def main(args: Array[String]): Unit = {
+  /**
+    * Execute the main program
+    * @param args
+    */
+  def main(args: Array[String]) : Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("NQuads Search")
     val sc = new SparkContext(conf)
