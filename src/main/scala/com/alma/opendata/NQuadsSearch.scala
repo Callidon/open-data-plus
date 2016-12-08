@@ -50,7 +50,7 @@ object NQuadsSearch {
     */
   def runStageTwo(files: String, stageOneFiles: String, sc : SparkContext) : Unit = {
     val dataFile : RDD[String] = sc.textFile(files)
-    val stageOne  = sc.broadcast(TreeSet[String]() ++ sc.textFile(stageOneFiles).collect().toSet)
+    val stageOne  = sc.broadcast(sc.textFile(stageOneFiles).collect().map(line => line + " "))
 
     dataFile.filter(nquad => {
       stageOne.value.contains(getContext(nquad))
