@@ -128,12 +128,7 @@ Once the cluster has been deployed, you must upload all the files you want to ev
 
 Then, you can launch the crawler with the following command:
 ```bash
-# To run stage one 
-spark-submit --class com.alma.opendata.NQuadsSearch --master <spark-master-url> --deploy-mode cluster target/open-data-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar -stageOne path/to/data/files
-
-# To run stage two
-spark-submit --class com.alma.opendata.NQuadsSearch --master <spark-master-url> --deploy-mode cluster target/open-data-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar -stageTwo path/to/data/files
-
+spark-submit --class com.alma.opendata.NQuadsSearch --master <spark-master-url> --deploy-mode cluster target/open-data-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar path/to/data/files
 ```
 
 You can see the progress of the task at `http://localhost:8080`(on the master). **This will also gives you the spark master url.**
