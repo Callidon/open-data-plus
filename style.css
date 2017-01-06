@@ -1,0 +1,25 @@
+svg {
+    border: 1px solid black;
+}
+
+svg .node-text {
+    fill: white;
+    font-size: 10px;
+    font-family: Verdana;
+    text-anchor: middle;
+    width: 100%;
+}
+
+.tooltip {
+    color: white;
+    background-color: black;
+
+    font-family: Verdana;
+
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.tooltip p {
+    margin: 0;
+}
