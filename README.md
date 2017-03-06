@@ -25,6 +25,16 @@ git clone https://github.com/Callidon/open-data-plus.git
 cd open-data-plus/
 mvn package
 ```
+# Usage
+```
+Open Data Plus Crawler: Analyze Web Data Commons using Apache Spark
+Usage: <operation> <options>
+	Operations:
+		-s1 <data-files>	Run stage one with the given data files
+		-s2 <stage1-files> <data-files>		Run stage two using the output of stage 1 and the data files
+		-agg <stage2-files>		Run aggregation using the output of stage 2
+		-tree <aggregate-files>		Run the decision tree using the aggregate data
+```
 
 # Cluster setup
 
@@ -44,10 +54,10 @@ All configuration files must be placed in `$HADOOP_HOME/etc/hadoop`.
 
 * `core-site.xml`: replace `$HOSTNAME` by the IP address of the current host (ex: 172.16.134.152), and `$HADOOP_DIR` by the location where files will be stored by the HDFS (make sure you have enough space!)
 ```xml
-<configuration> 
-  <property> 
-    <name>fs.defaultFS</name> 
-    <value>hdfs://$HOSTNAME:9000</value> 
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://$HOSTNAME:9000</value>
   </property>
   <property>
   	<name>hadoop.tmp.dir</name>
@@ -81,9 +91,9 @@ All configuration files must be placed in `$HADOOP_HOME/etc/hadoop`.
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
     </property>
-    <property> 
-      <name>mapred.job.tracker</name> 
-      <value>$MASTER_HOST:9001</value> 
+    <property>
+      <name>mapred.job.tracker</name>
+      <value>$MASTER_HOST:9001</value>
    </property>
 </configuration>
 ```
@@ -126,9 +136,11 @@ $HADOOP_HOME/sbin/stop-yarn.sh
 
 Once the cluster has been deployed, you must upload all the files you want to evaluate on the Hadoop file system.
 
-Then, you can launch the crawler with the following command:
-```bash
-spark-submit --class com.alma.opendata.NQuadsSearch --master <spark-master-url> --deploy-mode cluster target/open-data-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar path/to/data/files
+Then, you can launch the crawler using `spark-submit`
+
+Example:
+```
+spark-submit --class com.alma.opendata.CLI target/open-data-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar -s1 data/*.nq
 ```
 
 You can see the progress of the task at `http://localhost:8080`(on the master). **This will also gives you the spark master url.**
