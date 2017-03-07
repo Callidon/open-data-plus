@@ -14,8 +14,8 @@ d3.json('domain.json', function (json) {
 
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  var svg = d3.select('body').append('svg')
-    .attr('width', width)
+  var svg = d3.select('svg')
+    .attr('width', '100%')
     .attr('height', height);
 
   var nodeGroup = svg.append('g');
@@ -26,14 +26,16 @@ d3.json('domain.json', function (json) {
         nodeGroup.attr('transform', d3.event.transform);
       }));
 
-  var tooltip = d3.select('body').append('div')
-    .attr('class', 'tooltip')
-    .style('position', 'absolute')
-    .style('z-index', 10)
-    .style('visibility', 'hidden');
+  // var tooltip = d3.select('body').append('div')
+  //   .attr('class', 'tooltip')
+  //   .style('position', 'absolute')
+  //   .style('z-index', 1000)
+  //   .style('visibility', 'hidden');
 
-  var domainTooltip = tooltip.append('p');
-  var occurenceTooltip = tooltip.append('p');
+  // var domainTooltip = tooltip.append('p');
+  // var occurenceTooltip = tooltip.append('p');
+  var domainTooltip = d3.select('#tooltip-text')
+  var occurenceTooltip = d3.select('#tooltip-occ')
 
   var simulation = d3.forceSimulation()
     .nodes(nodes)
@@ -72,15 +74,15 @@ d3.json('domain.json', function (json) {
     .attr('fill', function (d, i) { return color(i); })
     .on('mouseover', function (d) {
       domainTooltip.text(d.domain);
-      occurenceTooltip.text('occurence: ' + d.count)
-      tooltip.style('visibility', 'visible');
+      occurenceTooltip.text(d.count)
+      // tooltip.style('visibility', 'visible');
     })
     .on('mousemove', function () {
-      tooltip.style("top", (d3.event.pageY - 10) + "px")
-        .style("left",(d3.event.pageX + 10) + "px");
+      // tooltip.style("top", (d3.event.pageY - 10) + "px")
+      //   .style("left",(d3.event.pageX + 10) + "px");
     })
     .on("mouseout", function () {
-      tooltip.style("visibility", "hidden");
+      // tooltip.style("visibility", "hidden");
     });
 
   nodeElements.append('text')

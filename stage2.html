@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Open Data Plus</title>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-  </head>
-  <body>
+<head>
+  <link rel="stylesheet" href="style.css">
+
+  <meta charset="UTF-8" />
+  <title>Semantic graph</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -30,12 +32,17 @@
 
   <div class="container">
     <div class="row">
-      <h1>Browse visualizations for Open Data +</h1>
-      <ul>
-        <li><a href="stage2.html">Stage 2</a></li>
-        <li><a href="stage3.html">Stage 3</a></li>
-      </ul>
+      <h1>Domains related to Nantes</h1>
+      <div class="well">
+        <p><strong>Domain:</strong> <span id="tooltip-text"></span></p>
+        <p><strong>Occurences:</strong> <span id="tooltip-occ"></span></p>
+      </div>
+      <svg></svg>
     </div>
   </div>
-  </body>
-</html>
+
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+  <script type="text/javascript" src="stage2.js"></script>
+</body>
