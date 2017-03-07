@@ -16,6 +16,8 @@ stage2 | ~ 50mn | ?? | 3970
 Stage | Execution time | # Mappers | # Stages
 ------------ | ------------- | ------------- | -------------
 stage1 | 7890,99s/2,19h | 40 | 3695
-stage2 | ?? | ?? | ??
+stage2 | ?? | 10 | 3695
 agg | 270,11s/4,5mn | 40 | 86
 agg + tree | 236,86s/3,9mn | 40 | 86
+
+Average number of memory used: 35GB
