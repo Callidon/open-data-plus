@@ -2,6 +2,7 @@ package com.alma.opendata
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import java.net.URL
 
 import scala.collection.immutable.TreeSet
 
@@ -88,7 +89,16 @@ object Analyzer {
   * @param data
   * @return
   */
-  def desaggregate(data: RDD[(String, String)]) : RDD[String] = data.flatMap(t => t._2.split(" . ").map(_ + "<" + t._1 + "> ."))
+  def desaggregate(data: RDD[(String, String)]) : RDD[String] = data.flatMap(t => t._2.split(" . ").map(_ + " <" + t._1 + "> ."))
+
+  /**
+   * Format data for visualization plot
+   */
+  def plotFormat(data: RDD[(String, String)]) : RDD[String] = {
+    data.map(t => (new URL(t._1).getHost, t._2.split(" . ").length))
+    .reduceByKey(_ + _)
+    .map(t => t._1 + "," + t._2)
+  }
 
   /**
   * Run stage 3 : aggregation + decision tree

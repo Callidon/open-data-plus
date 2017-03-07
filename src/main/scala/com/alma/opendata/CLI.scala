@@ -60,6 +60,10 @@ object CLI {
         val results = Analyzer.runStageThree(args(1), sc)
         Analyzer.desaggregate(results).saveAsTextFile(args(2))
       }
+      case "-plot" => {
+        val results = Analyzer.runStageThree(args(1), sc)
+        Analyzer.plotFormat(results).saveAsTextFile(args(2))
+      }
       case _ => println("Invalid arguments, see usage: \n" + usage)
     }
   }
