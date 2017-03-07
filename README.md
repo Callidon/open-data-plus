@@ -29,11 +29,11 @@ mvn package
 ```
 Open Data Plus Crawler: Analyze Web Data Commons using Apache Spark
 Usage: <operation> <options>
-	Operations:
-		-s1 <data-files>	Run stage one with the given data files
-		-s2 <stage1-files> <data-files>		Run stage two using the output of stage 1 and the data files
-		-agg <stage2-files>		Run aggregation using the output of stage 2
-		-tree <aggregate-files>		Run the decision tree using the aggregate data
+Operations:
+  -s1 <data-files>    Run stage 1 with the given data files
+  -s2 <stage1-files> <data-files>    Run stage 2 using the output of stage 1 and the data files
+  -agg <stage2-files> <output-directory>    Run aggregation using the output of stage 2 and store it in a directory
+  -s3 <stage2-files> <output-directory>    Run stage 3 (aggregation + decision tree) using the output of stage 2 and store it in a directory
 ```
 
 # Cluster setup
@@ -147,6 +147,7 @@ You can see the progress of the task at `http://localhost:8080`(on the master). 
 
 ## Useful `spark-submit` options :
 
+* `--driver-memory <memory>` can be used to set how many memory the driver will use (in local mode)
 * `--executor-memory <memory>` can be used to set how many memory slaves will use (by default, 1G).
 * `--num-executors <number>` can be used to describes how many executors which will execute the application. We recommend to set this to the number of slaves in the cluster.
 
