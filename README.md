@@ -30,10 +30,10 @@ mvn package
 Open Data Plus Crawler: Analyze Web Data Commons using Apache Spark
 Usage: <operation> <options>
 Operations:
-  -s1 <data-files>    Run stage 1 with the given data files
-  -s2 <stage1-files> <data-files>    Run stage 2 using the output of stage 1 and the data files
-  -agg <stage2-files> <output-directory>    Run aggregation using the output of stage 2 and store it in a directory
-  -s3 <stage2-files> <output-directory>    Run stage 3 (aggregation + decision tree) using the output of stage 2 and store it in a directory
+  -s1 <data-files>    		          Run stage 1 with the given data files
+  -s2 <data-files> <stage1-files>         Run stage 2 using the output of stage 1 and the data files
+  -agg <stage2-files> <output-directory>  Run aggregation using the output of stage 2 and store it in a directory
+  -s3 <stage2-files> <output-directory>   Run stage 3 (aggregation + decision tree) using the output of stage 2 and store it in a directory
 ```
 
 # Cluster setup
